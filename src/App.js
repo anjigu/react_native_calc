@@ -12,9 +12,30 @@ const Operators = {
 export default function App() {
   const [result, setResult] = useState(0);
   const [formula, setFormula] = useState([]);
-  console.log(formula);
 
   const width = (useWindowDimensions().width - 5) / 4;
+  
+  const calculate = () => {
+    let calculatedNumber = 0; 
+    let operator = '';
+    formula.forEach((value) => {
+        if([Operators.PLUS, Operators.MINUS].includes(value)){
+            operator = value;
+        } else {
+            if(operator === Operators.PLUS){
+                calculatedNumber += value;
+            } else if (operator === Operators.MINUS){
+                calculatedNumber -= value;
+            } else {
+                calculatedNumber = value;
+            }
+            
+        }
+    })
+
+    setResult(calculatedNumber);
+    setFormula([]);
+  };
 
   const onPressNumber = (num) => {
     const last = formula.at(-1);
@@ -39,7 +60,7 @@ export default function App() {
         setFormula([]);
         break;
       case Operators.EQUAL:
-        // TODO
+        calculate();
         break;
       default: {
         const last = formula.at(-1);
