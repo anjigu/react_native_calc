@@ -1,4 +1,4 @@
-# react_native_calc
+# React Native_calc
 
 ![](https://velog.velcdn.com/images/anjigu/post/89e0a19f-a405-4c3f-9824-c52d28af598c/image.png)
 
