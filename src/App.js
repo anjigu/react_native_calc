@@ -1,9 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { string } from 'prop-types';
 import { useState } from 'react';
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import Button, { ButtonTypes } from './components/Button';
-
 const Operators = {
   CLEAR: 'C',
   MINUS: '-',
@@ -14,53 +12,58 @@ const Operators = {
 export default function App() {
   const [result, setResult] = useState(0);
   const [formula, setFormula] = useState([]);
+  console.log(formula);
+
   const width = (useWindowDimensions().width - 5) / 4;
 
   const onPressNumber = (num) => {
     const last = formula.at(-1);
 
-    if(isNaN(last)){
-        setResult(num);
-        formula(prev => [...prev, num])
+    if (isNaN(last)) {
+      setResult(num);
+      setFormula((prev) => [...prev, num]);
     } else {
-        const newNumber = (last ?? 0) * 10 + num;  
-        setResult(newNumber);
-        setFormula((prev) => {
-            prev.pop();
-            return [...prev, newNumber];
-        })
+      const newNumber = (last ?? 0) * 10 + num;
+      setResult(newNumber);
+      setFormula((prev) => {
+        prev.pop();
+        return [...prev, newNumber];
+      });
     }
-    setResult((prev) => prev * 10 + num);
   };
 
   const onPressOperator = (operator) => {
-    switch(operator){
-        case Operators.CLEAR:string;
+    switch (operator) {
+      case Operators.CLEAR:
         setResult(0);
         setFormula([]);
         break;
-        case Operators.EQUAL:string;
+      case Operators.EQUAL:
+        // TODO
         break;
-        default:string;
+      default: {
         const last = formula.at(-1);
         if ([Operators.PLUS, Operators.MINUS].includes(last)) {
-            setFormula((prev) => {
-              prev.pop();
-              return [...prev, operator];
-            });
-          } else {
-            setFormula((prev) => [...prev, operator]);
-          }
+          setFormula((prev) => {
+            prev.pop();
+            return [...prev, operator];
+          });
+        } else {
+          setFormula((prev) => [...prev, operator]);
+        }
         break;
+      }
     }
-  }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       <View style={styles.resultContainer}>
-        <Text style={styles.result}>{result.toLocaleString()}</Text>
+        <Text style={styles.result}>
+          {result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+        </Text>
       </View>
-
       <View style={styles.buttonContainer}>
         <View style={styles.leftPad}>
           <View style={styles.number}>
@@ -68,21 +71,20 @@ export default function App() {
               <Button
                 key={num}
                 title={num.toString()}
-                onPress={() => {onPressNumber(num)}}
+                onPress={() => onPressNumber(num)}
                 buttonStyle={{ width, height: width, marginTop: 1 }}
               />
             ))}
           </View>
-
           <View style={styles.bottom}>
             <Button
               title="0"
-              onPress={() => {onPressNumber(0)}}
+              onPress={() => onPressNumber(0)}
               buttonStyle={{ width: width * 2, height: width }}
             />
             <Button
               title={Operators.EQUAL}
-              onPress={() => {onPressOperator(Operators.EQUAL)}}
+              onPress={() => onPressOperator(Operators.EQUAL)}
               buttonStyle={{ width, height: width }}
               buttonType={ButtonTypes.OPERATOR}
             />
