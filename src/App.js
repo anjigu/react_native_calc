@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
+import { string } from 'prop-types';
 import { useState } from 'react';
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import Button, { ButtonTypes } from './components/Button';
@@ -12,11 +13,47 @@ const Operators = {
 
 export default function App() {
   const [result, setResult] = useState(0);
+  const [formula, setFormula] = useState([]);
   const width = (useWindowDimensions().width - 5) / 4;
+
   const onPressNumber = (num) => {
+    const last = formula.at(-1);
+
+    if(isNaN(last)){
+        setResult(num);
+        formula(prev => [...prev, num])
+    } else {
+        const newNumber = (last ?? 0) * 10 + num;  
+        setResult(newNumber);
+        setFormula((prev) => {
+            prev.pop();
+            return [...prev, newNumber];
+        })
+    }
     setResult((prev) => prev * 10 + num);
   };
 
+  const onPressOperator = (operator) => {
+    switch(operator){
+        case Operators.CLEAR:string;
+        setResult(0);
+        setFormula([]);
+        break;
+        case Operators.EQUAL:string;
+        break;
+        default:string;
+        const last = formula.at(-1);
+        if ([Operators.PLUS, Operators.MINUS].includes(last)) {
+            setFormula((prev) => {
+              prev.pop();
+              return [...prev, operator];
+            });
+          } else {
+            setFormula((prev) => [...prev, operator]);
+          }
+        break;
+    }
+  }
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -44,8 +81,8 @@ export default function App() {
               buttonStyle={{ width: width * 2, height: width }}
             />
             <Button
-              title="="
-              onPress={() => {}}
+              title={Operators.EQUAL}
+              onPress={() => {onPressOperator(Operators.EQUAL)}}
               buttonStyle={{ width, height: width }}
               buttonType={ButtonTypes.OPERATOR}
             />
@@ -54,19 +91,19 @@ export default function App() {
         <View style={styles.operator}>
           <Button
             title={Operators.CLEAR}
-            onPress={() => {}}
+            onPress={() => onPressOperator(Operators.CLEAR)}
             buttonStyle={{ width, height: width, marginBottom: 1 }}
             buttonType={ButtonTypes.OPERATOR}
           />
           <Button
             title={Operators.MINUS}
-            onPress={() => {}}
+            onPress={() => onPressOperator(Operators.MINUS)}
             buttonStyle={{ width, height: width, marginBottom: 1 }}
             buttonType={ButtonTypes.OPERATOR}
           />
           <Button
             title={Operators.PLUS}
-            onPress={() => {}}
+            onPress={() => onPressOperator(Operators.PLUS)}
             buttonStyle={{ width, height: width * 2, marginBottom: 1 }}
             buttonType={ButtonTypes.OPERATOR}
           />
