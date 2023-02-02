@@ -1,31 +1,51 @@
-import { Text, Pressable } from 'react-native';
+import { Text, Pressable, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
-const Button = ({ title, onPress }) => {
+export const ButtonTypes = {
+    NUMBER: 'NUMBER',
+    OPERATOR: 'OPERATOR'
+}
+
+const Colors = {
+    NUMBER : ['#71717a','#3E3E46' ],
+    OPERATOR: ['#f59e0b','#b45309' ],
+}
+const Button = ({ title, onPress, buttonStyle, buttonType }) => {
     return (
         <Pressable 
         onPress={onPress}
         style={({ pressed }) => [
-            { backgroundColor: 'red' },
-            pressed && { backgroundColor: 'orange', opacity: 0.3 },
-          ]}
+        styles.button, 
+        { backgroundColor: Colors[buttonType][0] },
+        pressed && { backgroundColor: Colors[buttonType][1] },
+        buttonStyle,
+         ]}
         >
-        <Text>{title}</Text>
+        <Text style={styles.title}>{title}</Text>
         </Pressable>
     );
 };
 
+Button.defaultProps = {
+    buttonType: ButtonTypes.NUMBER,
+}
+
 Button.propTypes = {
     title: PropTypes.string.isRequired,
     onPress: PropTypes.func.isRequired,
+    buttonStyle: PropTypes.object,
+    buttonType: PropTypes.oneOf(Object.values(ButtonTypes)),
 }
 
-const styles = StyleSheet.creats({
-    button: {},
-    title: {
-        fontSize: 50,
-        color: "#ffffff",
+const styles = StyleSheet.create({
+    button: {
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-})
+    title: {
+      fontSize: 50,
+      color: '#ffffff',
+    },
+  })
 
 export default Button;
