@@ -1,6 +1,6 @@
 # React Native_calc
 
-![](https://velog.velcdn.com/images/anjigu/post/89e0a19f-a405-4c3f-9824-c52d28af598c/image.png)
+![](https://velog.velcdn.com/images/fejigu/post/3088557f-8343-4c38-8744-688769dcb2c3/image.gif)
 
 * React native 환결 설정
 * Expo - IOS
